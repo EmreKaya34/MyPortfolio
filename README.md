@@ -1,4 +1,4 @@
-# Documant — Dinamik Portfolyo Yönetim Sistemi
+# MyPortfolio — Dinamik Portfolyo Yönetim Sistemi
 
 ASP.NET Core MVC (.NET 9) + Entity Framework Core (Code First, SQL Server) ile geliştirilmiş, tüm içeriği Admin panelinden yönetilen kişisel portfolyo sitesi.
 
@@ -36,3 +36,41 @@ ASP.NET Core MVC (.NET 9) + Entity Framework Core (Code First, SQL Server) ile g
 
 ## Klasör yapısı
 `Entities/` · `Context/` · `Services/` · `Areas/Admin/{Controllers,Models,Views,ViewComponents}` · `ViewCompanents/` (site bileşenleri) · `Views/`
+
+## Ekran Görüntüleri
+
+### Site
+
+**Ana Sayfa**
+
+![Ana Sayfa](screenshots/01-ana-sayfa.png)
+
+**Hakkımda**
+
+![Hakkımda](screenshots/02-hakkimda.png)
+
+**Yeteneklerim**
+
+![Yeteneklerim](screenshots/03-yeteneklerim.png)
+
+**Deneyimlerim**
+
+![Deneyimlerim](screenshots/04-deneyimlerim.png)
+
+**İletişim**
+
+![İletişim](screenshots/05-iletisim.png)
+
+### Admin Paneli
+
+**Dashboard**
+
+![Dashboard](screenshots/06-admin-dashboard.png)
+
+**Gelen Kutusu**
+
+![Gelen Kutusu](screenshots/07-admin-gelen-kutusu.png)
+
+**Yetenek Yönetimi**
+
+![Yetenek Yönetimi](screenshots/08-admin-yetenekler.png)
