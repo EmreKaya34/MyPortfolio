@@ -1,0 +1,52 @@
+@model List<Skill>
+@{
+    ViewData["Title"] = "Yeteneklerim";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<main class="page-content-area">
+    @await Html.PartialAsync("_PageHeader", new PageHeaderModel("Yeteneklerim", "Yetenek adı ve 0-100 arası seviye sitede ilerleme çubuğu olarak gösterilir.", "Yeni Yetenek Ekle", "CreateSkill"))
+
+    <div class="data-table-card">
+        <div class="table-filter-bar">
+            <div class="filters-left-group">
+                <div class="filter-search-box"><i class="bi bi-search"></i><input type="text" data-table-filter="#dataTable" placeholder="Yetenek ara..."></div>
+            </div>
+        </div>
+        <div class="table-responsive-wrapper">
+            <table class="custom-admin-table js-filter-table" id="dataTable">
+                <thead>
+                    <tr>
+                        <th style="width: 60px;">#</th>
+                        <th>Yetenek</th>
+                        <th>Açıklama</th>
+                        <th style="width: 220px;">Seviye</th>
+                        <th style="text-align: right; width: 170px;">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="col-id">#@item.SkillId</td>
+                            <td><div class="experience-title-cell"><div class="exp-icon-bullet"><i class="@item.IconUrl"></i></div><span class="exp-title-text">@item.Title</span></div></td>
+                            <td class="text-muted small">@item.Description</td>
+                            <td><div class="d-flex align-items-center gap-2"><div class="level-track flex-grow-1"><div class="level-fill" style="width:@(item.Level)%"></div></div><strong class="small">%@item.Level</strong></div></td>
+                            <td style="text-align: right;">
+                                <div class="row-actions-group justify-content-end">
+                                    <a class="btn-action-icon btn-edit" title="Güncelle" asp-action="UpdateSkill" asp-route-id="@item.SkillId"><i class="bi bi-pencil-square"></i></a>
+                                    <button type="button" class="btn-action-icon btn-delete js-delete" title="Sil" data-name="@item.Title"
+                                            data-url="@Url.Action("DeleteSkill", "Skill", new { area = "Admin", id = item.SkillId })"><i class="bi bi-trash3"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    @if (!Model.Any())
+                    {
+                        <tr class="empty-row"><td colspan="5">Henüz yetenek eklenmemiş.</td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>

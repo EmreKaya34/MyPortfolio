@@ -1,0 +1,70 @@
+@model Documant.Areas.Admin.Models.AdminSidebarViewModel
+@{
+    var menu = new[]
+    {
+        (Controller: "Dashboard",   Action: "Index",          Icon: "bi-grid-1x2",              Label: "Dashboard"),
+        (Controller: "Hero",        Action: "UpdateHero",     Icon: "bi-house-heart",           Label: "Ana Sayfa"),
+        (Controller: "HeroTitle",   Action: "HeroTitleList",  Icon: "bi-type",                  Label: "Dönen Unvanlar"),
+        (Controller: "About",       Action: "UpdateAbout",    Icon: "bi-person",                Label: "Hakkımda"),
+        (Controller: "Skill",       Action: "SkillList",      Icon: "bi-stars",                 Label: "Yeteneklerim"),
+        (Controller: "Experience",  Action: "ExperienceList", Icon: "bi-journal-bookmark-fill", Label: "Deneyimlerim"),
+        (Controller: "Project",     Action: "ProjectList",    Icon: "bi-code-slash",            Label: "Projelerim"),
+        (Controller: "Category",    Action: "CategoryList",   Icon: "bi-tags",                  Label: "Proje Kategorileri"),
+        (Controller: "Education",   Action: "EducationList",  Icon: "bi-mortarboard",           Label: "Eğitim"),
+        (Controller: "Contact",     Action: "ContactList",    Icon: "bi-envelope",              Label: "İletişim"),
+        (Controller: "SocialMedia", Action: "SocialMediaList",Icon: "bi-share",                 Label: "Sosyal Medya"),
+        (Controller: "Message",     Action: "MessageList",    Icon: "bi-inbox",                 Label: "Gelen Mesajlar")
+    };
+    var initials = string.Concat(Model.OwnerName.Split(' ', StringSplitOptions.RemoveEmptyEntries).Take(2).Select(x => x[0])).ToUpper();
+}
+
+<aside class="admin-sidebar" id="adminSidebar">
+    <div class="sidebar-header">
+        <div class="brand-mark"><i class="bi bi-briefcase-fill"></i></div>
+        <div class="brand-text">
+            <h1>@Model.OwnerName</h1>
+            <span>Yönetim Paneli</span>
+        </div>
+    </div>
+
+    <div class="sidebar-menu-wrapper">
+        <div class="menu-section-label">Menü</div>
+        <ul class="sidebar-nav">
+            @foreach (var item in menu)
+            {
+                var isActive = string.Equals(item.Controller, Model.CurrentController, StringComparison.OrdinalIgnoreCase);
+                <li>
+                    <a asp-area="Admin" asp-controller="@item.Controller" asp-action="@item.Action"
+                       class="sidebar-link @(isActive ? "active" : "")">
+                        <i class="bi @item.Icon"></i>
+                        <span>@item.Label</span>
+                        @if (item.Controller == "Message")
+                        {
+                            <span class="badge-count @(Model.UnreadMessageCount == 0 ? "d-none" : "")" id="sidebarUnreadBadge">@Model.UnreadMessageCount</span>
+                        }
+                    </a>
+                </li>
+            }
+        </ul>
+
+        <div class="menu-section-label mt-4">Sistem & Bağlantı</div>
+        <ul class="sidebar-nav">
+            <li>
+                <a href="/Default/Index" target="_blank" rel="noopener" class="sidebar-link">
+                    <i class="bi bi-box-arrow-up-right"></i>
+                    <span>Siteyi Önizle</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="sidebar-footer">
+        <div class="admin-user-card">
+            <div class="user-avatar-circle">@initials</div>
+            <div class="user-info">
+                <div class="user-name">@Model.OwnerName</div>
+                <div class="user-role">İçerik Yöneticisi</div>
+            </div>
+        </div>
+    </div>
+</aside>

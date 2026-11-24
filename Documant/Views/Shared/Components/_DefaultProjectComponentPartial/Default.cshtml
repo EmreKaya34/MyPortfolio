@@ -1,0 +1,122 @@
+@model List<Documant.Entities.Project>
+@{
+    // Filtre butonları: yalnızca aktif projesi olan kategoriler
+    var categories = Model
+        .Where(x => x.Category != null)
+        .Select(x => x.Category!)
+        .DistinctBy(x => x.CategoryId)
+        .OrderBy(x => x.CategoryName)
+        .ToList();
+}
+<!-- 8. Featured Projects Section -->
+<section id="projects">
+    <div class="container">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-4 gap-3 reveal-on-scroll">
+            <div>
+                <div class="eyebrow-badge"><i class="bi bi-folder-check"></i> SEÇİLMİŞ ÇALIŞMALAR</div>
+                <h2 class="section-title mb-1">Fikirden Ürüne Dönüşen Projeler</h2>
+                <p class="section-description mb-0">
+                    Öğrenme, üretme ve problem çözme süreçlerimin birer yansıması olan projelerimden bazıları.
+                </p>
+            </div>
+
+            <div class="d-flex flex-column align-items-md-end gap-2">
+                <!-- Kategori filtre butonları (veritabanından) -->
+                <div class="d-flex flex-wrap gap-2" id="projectFilters">
+                    <button class="filter-btn active" data-filter="all">Tümü</button>
+                    @foreach (var category in categories)
+                    {
+                        <button class="filter-btn" data-filter="cat-@category.CategoryId">@category.CategoryName</button>
+                    }
+                </div>
+
+                <select id="projectSort" class="form-select form-select-sm" style="width: auto;" aria-label="Projeleri sırala">
+                    <option value="newest">En yeni projeler</option>
+                    <option value="oldest">En eski projeler</option>
+                    <option value="title">Ada göre (A-Z)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row g-4" id="projectGrid">
+            @foreach (var project in Model)
+            {
+                <div class="col-lg-6 project-item reveal-on-scroll"
+                     data-category="cat-@project.CategoryId"
+                     data-date="@project.CreatedDate.Ticks"
+                     data-title="@project.ProjectTitle">
+                    <div class="project-card">
+                        <div class="project-thumb-wrap">
+                            @if (!string.IsNullOrEmpty(project.ImageUrl))
+                            {
+                                <img src="@project.ImageUrl" alt="@project.ProjectTitle" class="project-thumb-img">
+                            }
+                            else
+                            {
+                                <div class="project-thumb-img d-flex align-items-center justify-content-center text-muted" style="min-height: 220px;">
+                                    <i class="bi bi-image" style="font-size: 3rem;"></i>
+                                </div>
+                            }
+                            <span class="project-category-tag">@project.Category?.CategoryName</span>
+                        </div>
+                        <div class="project-body">
+                            <h3 class="h4 fw-bold mb-2">@project.ProjectTitle</h3>
+                            <p class="text-muted small mb-4 flex-grow-1">@project.ProjectDescription</p>
+                            <div class="mb-4">
+                                @foreach (var tech in project.Technologies.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+                                {
+                                    <span class="tech-badge">@tech</span>
+                                }
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between pt-3 border-top">
+                                <a href="#contact" class="btn-sage btn-sm">
+                                    <span>Bu Proje Hakkında Yaz</span>
+                                    <i class="bi bi-arrow-up-right"></i>
+                                </a>
+                                <span class="text-muted small"><i class="bi bi-calendar2 me-1"></i>@project.CreatedDate.ToString("MMM yyyy")</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        @if (!Model.Any())
+        {
+            <p class="text-center text-muted mt-4">Henüz yayınlanmış proje bulunmuyor.</p>
+        }
+    </div>
+</section>
+
+<script>
+    (function () {
+        const grid = document.getElementById('projectGrid');
+        const buttons = document.querySelectorAll('#projectFilters .filter-btn');
+        const sortSelect = document.getElementById('projectSort');
+        if (!grid) return;
+
+        // Kategori filtresi (tam eşleşme: cat-1, cat-10'u yanlışlıkla yakalamasın)
+        buttons.forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                buttons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const filter = btn.dataset.filter;
+                grid.querySelectorAll('.project-item').forEach(function (item) {
+                    item.style.display = (filter === 'all' || item.dataset.category === filter) ? '' : 'none';
+                });
+            });
+        });
+
+        // Sıralama
+        sortSelect.addEventListener('change', function () {
+            const items = Array.from(grid.querySelectorAll('.project-item'));
+            items.sort(function (a, b) {
+                if (sortSelect.value === 'oldest') return Number(a.dataset.date) - Number(b.dataset.date);
+                if (sortSelect.value === 'title') return a.dataset.title.localeCompare(b.dataset.title, 'tr');
+                return Number(b.dataset.date) - Number(a.dataset.date);
+            });
+            items.forEach(item => grid.appendChild(item));
+        });
+    })();
+</script>

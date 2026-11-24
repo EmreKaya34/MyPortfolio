@@ -1,0 +1,10 @@
+bin/
+obj/
+.vs/
+*.user
+wwwroot/uploads/*
+!wwwroot/uploads/profile/
+wwwroot/uploads/profile/*
+!wwwroot/uploads/profile/profil.jpg
+*.zip
+

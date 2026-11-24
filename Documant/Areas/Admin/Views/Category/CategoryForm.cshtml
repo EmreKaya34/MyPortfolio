@@ -1,0 +1,27 @@
+@model Category
+@{
+    var isNew = Model.CategoryId == 0;
+    ViewData["Title"] = isNew ? "Yeni Kategori Ekle" : "Kategoriyi Güncelle";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<main class="page-content-area">
+    @await Html.PartialAsync("_PageHeader", new PageHeaderModel(isNew ? "Yeni Kategori Ekle" : "Kategoriyi Güncelle", "Kategori adı proje formundaki açılır listede ve sitedeki filtrelerde kullanılır."))
+
+    <form method="post" class="form-card" style="max-width: 560px;">
+        <input type="hidden" asp-for="CategoryId" />
+
+        <div class="row g-3">
+            <div class="col-12">
+                <label asp-for="CategoryName" class="form-label-custom">Kategori Adı <span class="required-star">*</span></label>
+                <input asp-for="CategoryName" class="form-control-custom" placeholder="Örn: Web Uygulamaları" />
+                <span asp-validation-for="CategoryName" class="field-error"></span>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <a asp-action="CategoryList" class="btn-pastel-secondary text-decoration-none">Vazgeç</a>
+            <button type="submit" class="btn-pastel-primary"><i class="bi bi-check2-circle"></i><span>Kaydet</span></button>
+        </div>
+    </form>
+</main>

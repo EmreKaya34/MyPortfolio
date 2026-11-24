@@ -1,0 +1,54 @@
+@model int
+@{
+    var pageTitle = ViewData["Title"]?.ToString() ?? "Panel";
+}
+
+<header class="admin-navbar">
+    <div class="navbar-left">
+        <button class="sidebar-toggle-btn" id="sidebarToggle" aria-label="Menüyü Aç/Kapat">
+            <i class="bi bi-list"></i>
+        </button>
+        <div class="breadcrumb-custom">
+            <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index"><i class="bi bi-house me-1"></i> Ana Sayfa</a>
+            <span class="separator">/</span>
+            <span class="active-crumb">@pageTitle</span>
+        </div>
+    </div>
+
+    <div class="navbar-right">
+        <div class="nav-search-box">
+            <i class="bi bi-search"></i>
+            <input type="text" placeholder="Tabloda ara..." id="navQuickSearch">
+        </div>
+
+        <div class="dropdown">
+            <button class="btn-quick-add" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-plus-lg"></i>
+                <span>Hızlı Ekle</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
+                <li><a class="dropdown-item" asp-area="Admin" asp-controller="Project" asp-action="CreateProject"><i class="bi bi-code-slash me-2"></i>Yeni Proje</a></li>
+                <li><a class="dropdown-item" asp-area="Admin" asp-controller="Skill" asp-action="CreateSkill"><i class="bi bi-stars me-2"></i>Yeni Yetenek</a></li>
+                <li><a class="dropdown-item" asp-area="Admin" asp-controller="Experience" asp-action="CreateExperience"><i class="bi bi-journal-bookmark me-2"></i>Yeni Deneyim</a></li>
+                <li><a class="dropdown-item" asp-area="Admin" asp-controller="Education" asp-action="CreateEducation"><i class="bi bi-mortarboard me-2"></i>Yeni Eğitim</a></li>
+            </ul>
+        </div>
+
+        <a asp-area="Admin" asp-controller="Message" asp-action="MessageList" asp-route-status="unread" class="icon-action-btn" title="Okunmamış mesajlar">
+            <i class="bi bi-bell"></i>
+            @if (Model > 0)
+            {
+                <span class="notification-dot"></span>
+            }
+        </a>
+
+        <a asp-area="Admin" asp-controller="Message" asp-action="MessageList" class="icon-action-btn" title="Gelen kutusu">
+            <i class="bi bi-chat-left-text"></i>
+        </a>
+
+        <div class="nav-profile-pill">
+            <div class="nav-avatar-mini"><i class="bi bi-person-fill"></i></div>
+            <span class="d-none d-sm-inline font-weight-600" style="font-size:0.825rem; font-weight:600;">Admin</span>
+        </div>
+    </div>
+</header>

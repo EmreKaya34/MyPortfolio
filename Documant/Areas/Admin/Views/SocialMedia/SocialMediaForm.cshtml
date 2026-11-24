@@ -1,0 +1,43 @@
+@model SocialMedia
+@{
+    var isNew = Model.SocialMediaId == 0;
+    ViewData["Title"] = isNew ? "Yeni Sosyal Medya Bağlantısı" : "Bağlantıyı Güncelle";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<main class="page-content-area">
+    @await Html.PartialAsync("_PageHeader", new PageHeaderModel(isNew ? "Yeni Sosyal Medya Bağlantısı" : "Bağlantıyı Güncelle", "Zorunlu alanları (*) doldurup kaydedin."))
+
+    <form method="post" class="form-card" style="max-width: 760px;">
+        <input type="hidden" asp-for="SocialMediaId" />
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label asp-for="Name" class="form-label-custom">Platform <span class="required-star">*</span></label>
+                <input asp-for="Name" class="form-control-custom" placeholder="GitHub" />
+                <span asp-validation-for="Name" class="field-error"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="IconClass" class="form-label-custom">İkon (Bootstrap Icons sınıfı) <span class="required-star">*</span></label>
+                <input asp-for="IconClass" class="form-control-custom" placeholder="bi bi-github" />
+                <span asp-validation-for="IconClass" class="field-error"></span>
+            </div>
+            <div class="col-12">
+                <label asp-for="Url" class="form-label-custom">Bağlantı Adresi <span class="required-star">*</span></label>
+                <input asp-for="Url" class="form-control-custom" placeholder="https://github.com/kullanici" />
+                <span asp-validation-for="Url" class="field-error"></span>
+            </div>
+            <div class="col-12">
+                <div class="check-card">
+                    <span>Sitede göster (Aktif)</span>
+                    <div class="form-check form-switch m-0"><input asp-for="IsActive" class="form-check-input" /></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <a asp-action="SocialMediaList" class="btn-pastel-secondary text-decoration-none">Vazgeç</a>
+            <button type="submit" class="btn-pastel-primary"><i class="bi bi-check2-circle"></i><span>Kaydet</span></button>
+        </div>
+    </form>
+</main>

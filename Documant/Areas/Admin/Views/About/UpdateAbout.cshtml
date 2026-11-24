@@ -1,0 +1,77 @@
+@model About
+@{
+    ViewData["Title"] = "Hakkımda";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<main class="page-content-area">
+    @await Html.PartialAsync("_PageHeader", new PageHeaderModel("Hakkımda", "İsim, unvan, tanıtım yazısı, fotoğraf ve öne çıkan bilgiler sitedeki Hakkımda bölümüne yansır."))
+
+    <form method="post" enctype="multipart/form-data" style="max-width: 860px;">
+        <input type="hidden" asp-for="AboutId" />
+
+        <div class="form-card">
+            <div class="row g-3">
+            <div class="col-md-4">
+                <label asp-for="FullName" class="form-label-custom">İsim Soyisim <span class="required-star">*</span></label>
+                <input asp-for="FullName" class="form-control-custom" />
+                <span asp-validation-for="FullName" class="field-error"></span>
+            </div>
+            <div class="col-md-4">
+                <label asp-for="JobTitle" class="form-label-custom">Unvan <span class="required-star">*</span></label>
+                <input asp-for="JobTitle" class="form-control-custom" placeholder="Senior Developer" />
+                <span asp-validation-for="JobTitle" class="field-error"></span>
+            </div>
+            <div class="col-md-4">
+                <label asp-for="Location" class="form-label-custom">Konum <span class="required-star">*</span></label>
+                <input asp-for="Location" class="form-control-custom" placeholder="İstanbul" />
+                <span asp-validation-for="Location" class="field-error"></span>
+            </div>
+            <div class="col-12">
+                <label asp-for="Description1" class="form-label-custom">Tanıtım — 1. Paragraf <span class="required-star">*</span></label>
+                <textarea asp-for="Description1" rows="4" class="form-control-custom"></textarea>
+                <span asp-validation-for="Description1" class="field-error"></span>
+            </div>
+            <div class="col-12">
+                <label asp-for="Description2" class="form-label-custom">Tanıtım — 2. Paragraf</label>
+                <textarea asp-for="Description2" rows="4" class="form-control-custom"></textarea>
+                <span asp-validation-for="Description2" class="field-error"></span>
+            </div>
+                <div class="col-12">
+                    <label class="form-label-custom">Fotoğraf (JPG, PNG, WEBP — en fazla 2 MB)</label>
+                    <input type="file" name="photo" accept=".jpg,.jpeg,.png,.webp" class="form-control-custom" data-preview="#photoPreview" />
+                    @Html.ValidationMessage("photo", new { @class = "field-error" })
+                    <img id="photoPreview" class="upload-preview @(string.IsNullOrEmpty(Model.ImageUrl) ? "d-none" : "")" src="@Model.ImageUrl" alt="Önizleme" />
+                </div>
+            </div>
+        </div>
+
+        <div class="form-card">
+            <div class="form-label-custom mb-3">Öne Çıkan Bilgiler (üst kutu: değer, alt kutu: etiket)</div>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <input asp-for="Stat1Value" class="form-control-custom mb-2" placeholder="10+" />
+                    <input asp-for="Stat1Label" class="form-control-custom" placeholder="Yıl Deneyim" />
+                    <span asp-validation-for="Stat1Value" class="field-error"></span>
+                    <span asp-validation-for="Stat1Label" class="field-error"></span>
+                </div>
+                <div class="col-md-4">
+                    <input asp-for="Stat2Value" class="form-control-custom mb-2" placeholder="25+" />
+                    <input asp-for="Stat2Label" class="form-control-custom" placeholder="Eğitim İçeriği" />
+                    <span asp-validation-for="Stat2Value" class="field-error"></span>
+                    <span asp-validation-for="Stat2Label" class="field-error"></span>
+                </div>
+                <div class="col-md-4">
+                    <input asp-for="Stat3Value" class="form-control-custom mb-2" placeholder="200K+" />
+                    <input asp-for="Stat3Label" class="form-control-custom" placeholder="Öğrenci" />
+                    <span asp-validation-for="Stat3Value" class="field-error"></span>
+                    <span asp-validation-for="Stat3Label" class="field-error"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-pastel-primary"><i class="bi bi-check2-circle"></i><span>Değişiklikleri Kaydet</span></button>
+        </div>
+    </form>
+</main>

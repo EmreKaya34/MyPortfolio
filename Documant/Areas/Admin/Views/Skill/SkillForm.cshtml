@@ -1,0 +1,45 @@
+@model Skill
+@{
+    var isNew = Model.SkillId == 0;
+    ViewData["Title"] = isNew ? "Yeni Yetenek Ekle" : "Yeteneği Güncelle";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<main class="page-content-area">
+    @await Html.PartialAsync("_PageHeader", new PageHeaderModel(isNew ? "Yeni Yetenek Ekle" : "Yeteneği Güncelle", "Zorunlu alanları (*) doldurup kaydedin."))
+
+    <form method="post" class="form-card" style="max-width: 760px;">
+        <input type="hidden" asp-for="SkillId" />
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label asp-for="Title" class="form-label-custom">Yetenek Adı <span class="required-star">*</span></label>
+                <input asp-for="Title" class="form-control-custom" placeholder="Örn: ASP.NET Core" />
+                <span asp-validation-for="Title" class="field-error"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="IconUrl" class="form-label-custom">İkon (Bootstrap Icons sınıfı) <span class="required-star">*</span></label>
+                <input asp-for="IconUrl" class="form-control-custom" placeholder="bi bi-server" />
+                <span asp-validation-for="IconUrl" class="field-error"></span>
+            </div>
+            <div class="col-12">
+                <label asp-for="Description" class="form-label-custom">Kısa Açıklama <span class="required-star">*</span></label>
+                <input asp-for="Description" class="form-control-custom" />
+                <span asp-validation-for="Description" class="field-error"></span>
+            </div>
+            <div class="col-12">
+                <label asp-for="Level" class="form-label-custom">Seviye (0-100)</label>
+                <div class="form-range-wrap">
+                    <input asp-for="Level" type="range" min="0" max="100" step="5" data-output="#levelOutput" />
+                    <output id="levelOutput"></output>
+                </div>
+                <span asp-validation-for="Level" class="field-error"></span>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <a asp-action="SkillList" class="btn-pastel-secondary text-decoration-none">Vazgeç</a>
+            <button type="submit" class="btn-pastel-primary"><i class="bi bi-check2-circle"></i><span>Kaydet</span></button>
+        </div>
+    </form>
+</main>

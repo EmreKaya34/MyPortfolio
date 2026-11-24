@@ -1,0 +1,26 @@
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="tr">
+@await Component.InvokeAsync("_AdminLayoutHeadComponentPartial")
+<body>
+
+    <div class="admin-wrapper">
+        @await Component.InvokeAsync("_AdminLayoutSideBarComponentPartial")
+
+        <div class="admin-main">
+            @await Component.InvokeAsync("_AdminLayoutNavbarComponentPartial")
+
+            @RenderBody()
+        </div>
+    </div>
+
+    <!-- TempData bildirimleri ve silme/AJAX işlemleri için CSRF token -->
+    <div id="flashMessages" hidden data-success="@TempData["Success"]" data-error="@TempData["Error"]"></div>
+    <div id="antiForgeryHolder" hidden>@Html.AntiForgeryToken()</div>
+
+    @await Component.InvokeAsync("_AdminLayoutScriptComponentPartial")
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

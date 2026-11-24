@@ -1,0 +1,126 @@
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    (function () {
+        // ---------- Sidebar aç/kapat (mobil) ----------
+        const sidebar = document.getElementById('adminSidebar');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+
+        if (sidebar && sidebarToggle) {
+            sidebarToggle.addEventListener('click', () => sidebar.classList.toggle('show-sidebar'));
+
+            document.addEventListener('click', (e) => {
+                if (window.innerWidth <= 991.98 && !sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
+                    sidebar.classList.remove('show-sidebar');
+                }
+            });
+        }
+
+        // ---------- Bildirim (toast) ----------
+        window.showToast = function (title, message, icon) {
+            Swal.fire({
+                toast: true,
+                position: 'bottom-end',
+                icon: icon || 'success',
+                title: title,
+                text: message || '',
+                showConfirmButton: false,
+                timer: 3200,
+                timerProgressBar: true
+            });
+        };
+
+        // Controller'dan gelen TempData mesajları
+        const flash = document.getElementById('flashMessages');
+        if (flash) {
+            if (flash.dataset.success) showToast('Başarılı', flash.dataset.success, 'success');
+            if (flash.dataset.error) showToast('Hata', flash.dataset.error, 'error');
+        }
+
+        // ---------- AntiForgery ----------
+        window.getAntiForgeryToken = function () {
+            const input = document.querySelector('#antiForgeryHolder input[name="__RequestVerificationToken"]');
+            return input ? input.value : '';
+        };
+
+        function submitPost(url) {
+            const form = document.createElement('form');
+            form.method = 'post';
+            form.action = url;
+            form.innerHTML = document.getElementById('antiForgeryHolder').innerHTML;
+            document.body.appendChild(form);
+            form.submit();
+        }
+
+        // ---------- Silme onayı (SweetAlert2) ----------
+        document.addEventListener('click', function (e) {
+            const btn = e.target.closest('.js-delete');
+            if (!btn) return;
+            e.preventDefault();
+
+            Swal.fire({
+                title: 'Silmek istediğinize emin misiniz?',
+                text: btn.dataset.name ? '"' + btn.dataset.name + '" kalıcı olarak silinecek.' : 'Bu işlem geri alınamaz.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Evet, sil',
+                cancelButtonText: 'Vazgeç',
+                confirmButtonColor: '#C98686',
+                reverseButtons: true
+            }).then(function (result) {
+                if (result.isConfirmed) submitPost(btn.dataset.url);
+            });
+        });
+
+        // Aktif/pasif gibi tek tıkla POST işlemleri
+        document.addEventListener('click', function (e) {
+            const btn = e.target.closest('.js-post');
+            if (!btn) return;
+            e.preventDefault();
+            submitPost(btn.dataset.url);
+        });
+
+        // ---------- Tablo canlı arama ----------
+        function filterTable(table, query) {
+            const q = query.toLocaleLowerCase('tr').trim();
+            table.querySelectorAll('tbody tr').forEach(function (row) {
+                row.style.display = row.innerText.toLocaleLowerCase('tr').includes(q) ? '' : 'none';
+            });
+        }
+
+        document.querySelectorAll('[data-table-filter]').forEach(function (input) {
+            const table = document.querySelector(input.dataset.tableFilter);
+            if (table) input.addEventListener('input', () => filterTable(table, input.value));
+        });
+
+        const navSearch = document.getElementById('navQuickSearch');
+        const mainTable = document.querySelector('table.js-filter-table');
+        if (navSearch) {
+            if (mainTable) {
+                navSearch.addEventListener('input', () => filterTable(mainTable, navSearch.value));
+            } else {
+                navSearch.closest('.nav-search-box').style.display = 'none';
+            }
+        }
+
+        // ---------- Yüklenecek görsel önizlemesi ----------
+        document.querySelectorAll('input[type="file"][data-preview]').forEach(function (input) {
+            input.addEventListener('change', function () {
+                const img = document.querySelector(input.dataset.preview);
+                if (img && input.files && input.files[0]) {
+                    img.src = URL.createObjectURL(input.files[0]);
+                    img.classList.remove('d-none');
+                }
+            });
+        });
+
+        // ---------- Seviye çubuğu canlı değer ----------
+        document.querySelectorAll('input[type="range"][data-output]').forEach(function (range) {
+            const out = document.querySelector(range.dataset.output);
+            const update = () => { if (out) out.textContent = '%' + range.value; };
+            range.addEventListener('input', update);
+            update();
+        });
+    })();
+</script>

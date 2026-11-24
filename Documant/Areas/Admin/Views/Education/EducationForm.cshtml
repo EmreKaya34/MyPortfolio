@@ -1,0 +1,47 @@
+@model Education
+@{
+    var isNew = Model.EducationId == 0;
+    ViewData["Title"] = isNew ? "Yeni Eğitim Ekle" : "Eğitimi Güncelle";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<main class="page-content-area">
+    @await Html.PartialAsync("_PageHeader", new PageHeaderModel(isNew ? "Yeni Eğitim Ekle" : "Eğitimi Güncelle", "Zorunlu alanları (*) doldurup kaydedin."))
+
+    <form method="post" class="form-card" style="max-width: 760px;">
+        <input type="hidden" asp-for="EducationId" />
+
+        <div class="row g-3">
+            <div class="col-12">
+                <label asp-for="Title" class="form-label-custom">Bölüm / Derece <span class="required-star">*</span></label>
+                <input asp-for="Title" class="form-control-custom" placeholder="Örn: Lisans — Bilgisayar Programcılığı" />
+                <span asp-validation-for="Title" class="field-error"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="SchoolName" class="form-label-custom">Okul <span class="required-star">*</span></label>
+                <input asp-for="SchoolName" class="form-control-custom" />
+                <span asp-validation-for="SchoolName" class="field-error"></span>
+            </div>
+            <div class="col-md-4">
+                <label asp-for="Badge" class="form-label-custom">Rozet <span class="required-star">*</span></label>
+                <input asp-for="Badge" class="form-control-custom" placeholder="Mezuniyet / Devam Ediyor" />
+                <span asp-validation-for="Badge" class="field-error"></span>
+            </div>
+            <div class="col-md-2">
+                <label asp-for="DisplayOrder" class="form-label-custom">Sıra</label>
+                <input asp-for="DisplayOrder" class="form-control-custom" type="number" min="1" max="100" />
+                <span asp-validation-for="DisplayOrder" class="field-error"></span>
+            </div>
+            <div class="col-12">
+                <label asp-for="Description" class="form-label-custom">Açıklama <span class="required-star">*</span></label>
+                <textarea asp-for="Description" rows="4" class="form-control-custom"></textarea>
+                <span asp-validation-for="Description" class="field-error"></span>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <a asp-action="EducationList" class="btn-pastel-secondary text-decoration-none">Vazgeç</a>
+            <button type="submit" class="btn-pastel-primary"><i class="bi bi-check2-circle"></i><span>Kaydet</span></button>
+        </div>
+    </form>
+</main>

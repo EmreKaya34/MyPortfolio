@@ -1,0 +1,46 @@
+@model Experience
+@{
+    var isNew = Model.ExperienceId == 0;
+    ViewData["Title"] = isNew ? "Yeni Deneyim Ekle" : "Deneyimi Güncelle";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<main class="page-content-area">
+    @await Html.PartialAsync("_PageHeader", new PageHeaderModel(isNew ? "Yeni Deneyim Ekle" : "Deneyimi Güncelle", "Zorunlu alanları (*) doldurup kaydedin."))
+
+    <form method="post" class="form-card" style="max-width: 760px;">
+        <input type="hidden" asp-for="ExperienceId" />
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label asp-for="Title" class="form-label-custom">Unvan <span class="required-star">*</span></label>
+                <input asp-for="Title" class="form-control-custom" placeholder="Örn: Yazılım Geliştirici" />
+                <span asp-validation-for="Title" class="field-error"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="CompanyName" class="form-label-custom">Şirket / Kurum <span class="required-star">*</span></label>
+                <input asp-for="CompanyName" class="form-control-custom" />
+                <span asp-validation-for="CompanyName" class="field-error"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="CategoryName" class="form-label-custom">Çalışma Türü <span class="required-star">*</span></label>
+                <input asp-for="CategoryName" class="form-control-custom" placeholder="Örn: Tam Zamanlı" />
+                <span asp-validation-for="CategoryName" class="field-error"></span>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label-custom">Durum</label>
+                <div class="check-card"><span>Sitede göster (Aktif)</span><div class="form-check form-switch m-0"><input asp-for="IsActive" class="form-check-input" /></div></div>
+            </div>
+            <div class="col-12">
+                <label asp-for="Description" class="form-label-custom">Açıklama <span class="required-star">*</span></label>
+                <textarea asp-for="Description" rows="4" class="form-control-custom"></textarea>
+                <span asp-validation-for="Description" class="field-error"></span>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <a asp-action="ExperienceList" class="btn-pastel-secondary text-decoration-none">Vazgeç</a>
+            <button type="submit" class="btn-pastel-primary"><i class="bi bi-check2-circle"></i><span>Kaydet</span></button>
+        </div>
+    </form>
+</main>

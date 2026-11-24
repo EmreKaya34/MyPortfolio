@@ -1,0 +1,41 @@
+@model HeroSection
+@{
+    ViewData["Title"] = "Ana Sayfa";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<main class="page-content-area">
+    @await Html.PartialAsync("_PageHeader", new PageHeaderModel("Ana Sayfa (Karşılama Alanı)", "Sitenin en üstündeki karşılama metni, başlık, tanıtım ve fotoğrafı buradan yönetilir."))
+
+    <form method="post" enctype="multipart/form-data" class="form-card" style="max-width: 860px;">
+        <input type="hidden" asp-for="HeroSectionId" />
+
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label asp-for="Greeting" class="form-label-custom">Karşılama <span class="required-star">*</span></label>
+                <input asp-for="Greeting" class="form-control-custom" placeholder="Merhaba, ben" />
+                <span asp-validation-for="Greeting" class="field-error"></span>
+            </div>
+            <div class="col-md-8">
+                <label asp-for="Title" class="form-label-custom">Başlık / İsim <span class="required-star">*</span></label>
+                <input asp-for="Title" class="form-control-custom" />
+                <span asp-validation-for="Title" class="field-error"></span>
+            </div>
+            <div class="col-12">
+                <label asp-for="Description" class="form-label-custom">Tanıtım Metni <span class="required-star">*</span></label>
+                <textarea asp-for="Description" rows="4" class="form-control-custom"></textarea>
+                <span asp-validation-for="Description" class="field-error"></span>
+            </div>
+            <div class="col-12">
+                <label class="form-label-custom">Fotoğraf (JPG, PNG, WEBP — en fazla 2 MB)</label>
+                <input type="file" name="photo" accept=".jpg,.jpeg,.png,.webp" class="form-control-custom" data-preview="#photoPreview" />
+                @Html.ValidationMessage("photo", new { @class = "field-error" })
+                <img id="photoPreview" class="upload-preview @(string.IsNullOrEmpty(Model.MainImageUrl) ? "d-none" : "")" src="@Model.MainImageUrl" alt="Önizleme" />
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-pastel-primary"><i class="bi bi-check2-circle"></i><span>Değişiklikleri Kaydet</span></button>
+        </div>
+    </form>
+</main>

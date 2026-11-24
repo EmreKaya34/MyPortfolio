@@ -1,0 +1,38 @@
+@model HeroTitleFormViewModel
+@{
+    var isNew = Model.HeroTitleId == 0;
+    ViewData["Title"] = isNew ? "Yeni Unvan Ekle" : "Unvanı Güncelle";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<main class="page-content-area">
+    @await Html.PartialAsync("_PageHeader", new PageHeaderModel(isNew ? "Yeni Unvan Ekle" : "Unvanı Güncelle", "Zorunlu alanları (*) doldurup kaydedin."))
+
+    <form method="post" class="form-card" style="max-width: 760px;">
+        <input type="hidden" asp-for="HeroTitleId" />
+
+        <div class="row g-3">
+            <div class="col-md-9">
+                <label asp-for="Title" class="form-label-custom">Unvan <span class="required-star">*</span></label>
+                <input asp-for="Title" class="form-control-custom" placeholder="Örn: .NET Geliştirici" />
+                <span asp-validation-for="Title" class="field-error"></span>
+            </div>
+            <div class="col-md-3">
+                <label asp-for="Order" class="form-label-custom">Sıra</label>
+                <input asp-for="Order" class="form-control-custom" type="number" min="1" max="100" />
+                <span asp-validation-for="Order" class="field-error"></span>
+            </div>
+            <div class="col-12">
+                <div class="check-card">
+                    <span>Sitede göster (Aktif)</span>
+                    <div class="form-check form-switch m-0"><input asp-for="IsActive" class="form-check-input" /></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <a asp-action="HeroTitleList" class="btn-pastel-secondary text-decoration-none">Vazgeç</a>
+            <button type="submit" class="btn-pastel-primary"><i class="bi bi-check2-circle"></i><span>Kaydet</span></button>
+        </div>
+    </form>
+</main>

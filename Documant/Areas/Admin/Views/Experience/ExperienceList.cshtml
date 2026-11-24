@@ -1,0 +1,60 @@
+@model List<Experience>
+@{
+    ViewData["Title"] = "Deneyimlerim";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<main class="page-content-area">
+    @await Html.PartialAsync("_PageHeader", new PageHeaderModel("Deneyimlerim", "Portfolyo sitenizde yer alacak deneyim içeriklerini buradan yönetebilirsiniz. Pasif kayıtlar sitede görünmez.", "Yeni Deneyim Ekle", "CreateExperience"))
+
+    <div class="stats-row">
+        <div class="stat-card"><div class="stat-icon-wrapper icon-green"><i class="bi bi-briefcase"></i></div><div class="stat-content"><span class="stat-label">Toplam Deneyim</span><h3 class="stat-value">@Model.Count</h3></div></div>
+        <div class="stat-card"><div class="stat-icon-wrapper icon-blue"><i class="bi bi-check2-circle"></i></div><div class="stat-content"><span class="stat-label">Aktif Kayıt</span><h3 class="stat-value">@Model.Count(x => x.IsActive)</h3></div></div>
+        <div class="stat-card"><div class="stat-icon-wrapper icon-beige"><i class="bi bi-pause-circle"></i></div><div class="stat-content"><span class="stat-label">Pasif Kayıt</span><h3 class="stat-value">@Model.Count(x => !x.IsActive)</h3></div></div>
+    </div>
+
+    <div class="data-table-card">
+        <div class="table-filter-bar">
+            <div class="filters-left-group">
+                <div class="filter-search-box"><i class="bi bi-search"></i><input type="text" data-table-filter="#dataTable" placeholder="Unvan veya şirkete göre ara..."></div>
+            </div>
+        </div>
+        <div class="table-responsive-wrapper">
+            <table class="custom-admin-table js-filter-table" id="dataTable">
+                <thead>
+                    <tr>
+                        <th style="width: 60px;">#</th>
+                        <th>Unvan</th>
+                        <th>Şirket</th>
+                        <th>Çalışma Türü</th>
+                        <th>Durum</th>
+                        <th style="text-align: right; width: 170px;">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="col-id">#@item.ExperienceId</td>
+                            <td><div class="experience-title-cell"><div class="exp-icon-bullet"><i class="bi bi-laptop"></i></div><span class="exp-title-text">@item.Title</span></div></td>
+                            <td><div class="company-cell"><i class="bi bi-building company-badge-icon"></i><span>@item.CompanyName</span></div></td>
+                            <td><span class="work-type-badge">@item.CategoryName</span></td>
+                            <td>@await Html.PartialAsync("_StatusPill", item.IsActive)</td>
+                            <td style="text-align: right;">
+                                <div class="row-actions-group justify-content-end">
+                                    <a class="btn-action-icon btn-edit" title="Güncelle" asp-action="UpdateExperience" asp-route-id="@item.ExperienceId"><i class="bi bi-pencil-square"></i></a>
+                                    <button type="button" class="btn-action-icon btn-delete js-delete" title="Sil" data-name="@item.Title"
+                                            data-url="@Url.Action("DeleteExperience", "Experience", new { area = "Admin", id = item.ExperienceId })"><i class="bi bi-trash3"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    @if (!Model.Any())
+                    {
+                        <tr class="empty-row"><td colspan="6">Henüz deneyim eklenmemiş.</td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>

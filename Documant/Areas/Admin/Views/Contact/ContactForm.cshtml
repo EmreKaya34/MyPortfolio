@@ -1,0 +1,47 @@
+@model Contact
+@{
+    var isNew = Model.ContactId == 0;
+    ViewData["Title"] = isNew ? "Yeni İletişim Bilgisi" : "İletişim Bilgisini Güncelle";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<main class="page-content-area">
+    @await Html.PartialAsync("_PageHeader", new PageHeaderModel(isNew ? "Yeni İletişim Bilgisi" : "İletişim Bilgisini Güncelle", "Zorunlu alanları (*) doldurup kaydedin."))
+
+    <form method="post" class="form-card" style="max-width: 760px;">
+        <input type="hidden" asp-for="ContactId" />
+
+        <div class="row g-3">
+            <div class="col-12">
+                <label asp-for="Title" class="form-label-custom">Başlık <span class="required-star">*</span></label>
+                <input asp-for="Title" class="form-control-custom" />
+                <span asp-validation-for="Title" class="field-error"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="Email" class="form-label-custom">E-posta <span class="required-star">*</span></label>
+                <input asp-for="Email" class="form-control-custom" type="email" />
+                <span asp-validation-for="Email" class="field-error"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="PhoneNumber" class="form-label-custom">Telefon <span class="required-star">*</span></label>
+                <input asp-for="PhoneNumber" class="form-control-custom" />
+                <span asp-validation-for="PhoneNumber" class="field-error"></span>
+            </div>
+            <div class="col-12">
+                <label asp-for="Location" class="form-label-custom">Lokasyon <span class="required-star">*</span></label>
+                <input asp-for="Location" class="form-control-custom" />
+                <span asp-validation-for="Location" class="field-error"></span>
+            </div>
+            <div class="col-12">
+                <label asp-for="Description" class="form-label-custom">Açıklama <span class="required-star">*</span></label>
+                <textarea asp-for="Description" rows="4" class="form-control-custom"></textarea>
+                <span asp-validation-for="Description" class="field-error"></span>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <a asp-action="ContactList" class="btn-pastel-secondary text-decoration-none">Vazgeç</a>
+            <button type="submit" class="btn-pastel-primary"><i class="bi bi-check2-circle"></i><span>Kaydet</span></button>
+        </div>
+    </form>
+</main>
